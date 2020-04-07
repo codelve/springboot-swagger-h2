@@ -9,27 +9,29 @@ import java.sql.Date;
 
 @Entity
 @Table(name = "customer")
-@NoArgsConstructor @AllArgsConstructor
-@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @ToString
 @Builder
 public class CustomerEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
-	private Long userId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long userId;
 
-	@Column(nullable = false, length = 50)
-	private String name;
+    @Column(nullable = false, length = 50)
+    private String name;
 
-	@Column(name = "DOB")
-	private Date dateofBirth;
+    @Column(name = "DOB")
+    private Date dateofBirth;
 
-	private String address;
+    private String address;
 
-	@Column
-	@Lob
-	private byte[] user_image;
+    @Column(name = "IMAGE")
+    @Lob
+    private byte[] userImage;
 
 }

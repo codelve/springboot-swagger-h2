@@ -6,8 +6,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
 
-@NoArgsConstructor @AllArgsConstructor
-@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @ToString
 @Builder
 public class CustomerDTO {
@@ -20,6 +22,7 @@ public class CustomerDTO {
     @NotNull(message = "DOB is mandatory")
     private Date dateofBirth;
     private String address;
+    private byte[] userImage;
 
 }
 

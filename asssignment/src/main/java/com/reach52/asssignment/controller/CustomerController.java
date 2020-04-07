@@ -2,6 +2,7 @@ package com.reach52.asssignment.controller;
 
 import com.reach52.asssignment.dto.CustomerDTO;
 import com.reach52.asssignment.dto.ErrorMessage;
+import com.reach52.asssignment.exceptions.InvalidImageException;
 import com.reach52.asssignment.exceptions.NoSuchCustomerException;
 import com.reach52.asssignment.service.CustomerService;
 import io.swagger.annotations.Api;
@@ -10,10 +11,12 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -34,17 +37,18 @@ public class CustomerController {
 
     //Fetching customer details
     @GetMapping(produces = "application/json")
-    @ApiOperation(value = "Fetch all the customers", response = CustomerDTO.class, tags="fetchCustomer")
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "Fetched the customers successfully"),
-            @ApiResponse(code = 404, message = "Customer details not found") })
+    @ApiOperation(value = "Fetch all the customers", response = CustomerDTO.class, tags = "fetchCustomer")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Fetched the customers successfully"),
+            @ApiResponse(code = 404, message = "Customer details not found")})
     public List<CustomerDTO> fetchCustomer() {
         return customerService.fetchCustomer();
     }
 
 
     //Adding a customer
-    @PostMapping(consumes = "application/json")
-    public ResponseEntity createCustomer(@Valid @RequestBody CustomerDTO customerDTO, Errors errors) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Object> uploadFile(@RequestParam("file") MultipartFile file, @Valid @ModelAttribute CustomerDTO customerDTO, Errors errors) throws InvalidImageException {
+
         String response = "";
         if (errors.hasErrors()) {
             //collecting the validation errors of all fields together in a String delimited by commas
@@ -54,10 +58,9 @@ public class CustomerController {
             error.setMessage(response);
             return ResponseEntity.ok(error);
         } else {
-            response = customerService.createCustomer(customerDTO);
+            response = customerService.createCustomer(customerDTO, file);
             return ResponseEntity.ok(response);
         }
-
     }
 
     //Updating an existing customer

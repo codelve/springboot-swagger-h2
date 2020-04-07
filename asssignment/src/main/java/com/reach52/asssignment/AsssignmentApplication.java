@@ -13,17 +13,17 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class AsssignmentApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(AsssignmentApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(AsssignmentApplication.class, args);
+    }
 
-	@Bean
-	public Docket api() {
-		return new Docket(DocumentationType.SWAGGER_2)
-				.select()
-				.apis(RequestHandlerSelectors.any())
-				.paths(PathSelectors.any())
-				.build().useDefaultResponseMessages(false); //For disabling default response messages
-	}
+    @Bean
+    public Docket api() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.any())
+                .build().useDefaultResponseMessages(false); //For disabling default response messages
+    }
 
 }

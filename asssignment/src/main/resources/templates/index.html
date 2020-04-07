@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>File upload Demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="jumbotron">
+        <h1>Create Customer Demo</h1>
+    </div>
+
+</div>
+
+<div class="container">
+
+    <div class="alert alert-success">Customer created successfully</div>
+
+    <div class="alert alert-danger">Error occurred</div>
+
+    <div class="form-group">
+        <label for="name">Name:</label> <input type="text"
+                                               class="form-control" id="name" name="name">
+    </div>
+
+    <div class="form-group">
+        <label for="dateofBirth">Date Of Birth:</label> <input type="date"
+                                                               class="form-control" id="dateofBirth" name="dateofBirth">
+    </div>
+
+
+    <div class="form-group">
+        <label for="address">Address:</label> <textarea class="form-control" name="address" id="address" rows="4"
+                                                        cols="50"></textarea>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" id="fileUploadForm">
+        <div class="form-group">
+            <input type="file" class="form-control-file border" name="file">
+        </div>
+    </form>
+
+    <button type="button" id="btnSubmit" class="btn btn-primary">Submit</button>
+
+</div>
+
+<script>
+$(document).ready(function () {
+
+	$(".alert-success").hide();
+	$(".alert-danger").hide();
+    $("#btnSubmit").click(function () {
+
+
+
+    var form = $('#fileUploadForm')[0];
+        var data = new FormData(form);
+        data.append("name", $("#name").val());
+        data.append("address", $("#address").val());
+        data.append("dateofBirth", $("#dateofBirth").val());
+        $("#btnSubmit").prop("disabled", true);
+        $.ajax({
+            type: "POST",
+            enctype: 'multipart/form-data',
+            url: "/customers",
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (data) {
+                console.log("SUCCESS : ", data);
+                $("#btnSubmit").prop("disabled", false);
+                $(".alert-success").show();
+                $(".alert-danger").hide();
+            },
+            error: function (e) {
+
+            	 $(".alert-success").hide();
+                 $(".alert-danger").show();
+                console.log("ERROR : ", e);
+                $("#btnSubmit").prop("disabled", false);
+
+            }
+        });
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>
